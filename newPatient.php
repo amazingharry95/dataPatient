@@ -25,6 +25,24 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    
+    <style>
+        #bar_blank{
+            border: solid 1px #000;
+            height: 20px;
+            width: 300px;
+        }
+        
+        #bar_color{
+            background-color: #006666;
+            height: 20px;
+            width: 0px;
+        }
+        
+        #bar_blank, #hidden_iframe{
+            display: none;
+        }
+    </style>
   </head>
 
   <body>
@@ -94,38 +112,44 @@
                   <div class="form-panel">
                   	  <h4 class="mb"><i class="fa fa-angle-right"></i> NEW PATIENT</h4>
                       <form class="form-horizontal style-form" method="get">
-                          <div class="form-group">
-                              <label class="col-sm-2 col-sm-2 control-label">ID Patient</label>
+                         <div class="form-group">
+                              <label class="col-sm-2 col-sm-2 control-label">Date of Today</label>
                               <div class="col-sm-10">
-                                  <input type="text" class="form-control">
+                                  <input class="form-control" id="disabledInput" type="text" placeholder="<?php echo date('d/m/Y'); ?>" disabled>
                               </div>
                           </div>
                           <div class="form-group">
-                              <label class="col-sm-2 col-sm-2 control-label">Help text</label>
+                              <label class="col-sm-2 col-sm-2 control-label">Type of Patient</label>
                               <div class="col-sm-10">
-                                  <input type="text" class="form-control">
-                                  <span class="help-block">A block of help text that breaks onto a new line and may extend beyond one line.</span>
+                                    <select class="form-control">
+                                      <option>RANDOM</option>
+                                      <option>FASTING</option>
+                                    </select>
                               </div>
                           </div>
                           <div class="form-group">
-                              <label class="col-sm-2 col-sm-2 control-label">Rounder</label>
+                              <label class="col-sm-2 col-sm-2 control-label">Diagnosis of the Patient</label>
                               <div class="col-sm-10">
-                                  <input type="text" class="form-control round-form">
+                                    <select class="form-control">
+                                      <option>HEALTHY</option>
+                                      <option>AMID</option>
+                                        <option>CHRONIC</option>
+                                    </select>
                               </div>
                           </div>
                           <div class="form-group">
-                              <label class="col-sm-2 col-sm-2 control-label">Input focus</label>
+                              <label class="col-sm-2 col-sm-2 control-label">Name of Patient</label>
                               <div class="col-sm-10">
-                                  <input class="form-control" id="focusedInput" type="text" value="This is focused...">
+                                  <input class="form-control" id="patientName" type="text">
                               </div>
                           </div>
                           <div class="form-group">
-                              <label class="col-sm-2 col-sm-2 control-label">Disabled</label>
+                              <label class="col-sm-2 col-sm-2 control-label">Blood Glucose Level</label>
                               <div class="col-sm-10">
-                                  <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input here..." disabled>
+                                  <input class="form-control" type="number" id="bloodGlucose" min="1" max="200">
                               </div>
                           </div>
-                          <div class="form-group">
+                          <!--<div class="form-group">
                               <label class="col-sm-2 col-sm-2 control-label">Placeholder</label>
                               <div class="col-sm-10">
                                   <input type="text"  class="form-control" placeholder="placeholder">
@@ -142,7 +166,7 @@
                               <div class="col-lg-10">
                                   <p class="form-control-static">email@example.com</p>
                               </div>
-                          </div>
+                          </div>-->
                       </form>
                   </div>
           		</div><!-- col-lg-12-->      	
@@ -172,27 +196,21 @@
           	<div class="row mt">
           		<div class="col-lg-12">
           			<div class="form-panel">
-                  	  <h4 class="mb"><i class="fa fa-angle-right"></i> Input Messages</h4>
+                  	  <h4 class="mb"><i class="fa fa-angle-right"></i> Patient's Sensors Data</h4>
+                        <div class="form-group">  
                           <form class="form-horizontal tasi-form" method="get">
-                              <div class="form-group has-success">
-                                  <label class="col-sm-2 control-label col-lg-2" for="inputSuccess">Input with success</label>
-                                  <div class="col-lg-10">
-                                      <input type="text" class="form-control" id="inputSuccess">
+                                  <div id="bar_blank">
+                                        <div id="bar_color"></div>
                                   </div>
-                              </div>
-                              <div class="form-group has-warning">
-                                  <label class="col-sm-2 control-label col-lg-2" for="inputWarning">Input with warning</label>
-                                  <div class="col-lg-10">
-                                      <input type="text" class="form-control" id="inputWarning">
-                                  </div>
-                              </div>
-                              <div class="form-group has-error">
-                                  <label class="col-sm-2 control-label col-lg-2" for="inputError">Input with error</label>
-                                  <div class="col-lg-10">
-                                      <input type="text" class="form-control" id="inputError">
-                                  </div>
-                              </div>
+                              <div id="status"></div>
+                                  <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" id="myForm" enctype="multipart/form-data" target="hidden_iframe">
+                                        <input type="hidden" value="myForm" name="<?php echo ini_get("session.upload_progress.name");?>">
+                                        <input type="file" name="userfile"><br>
+                                        <input type="submit" value="Start Upload">
+                                  </form>
+                                  <iframe id="hidden_iframe" name="hidden_iframe" src="about:blank"></iframe>
                           </form>
+                        </div>
           			</div><!-- /form-panel -->
           		</div><!-- /col-lg-12 -->
           	</div><!-- /row -->
@@ -349,6 +367,8 @@
       });
 
   </script>
+      
+  <script type="text/javascript" src="javascript/script.js"></script>
 
   </body>
 </html>

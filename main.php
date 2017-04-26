@@ -86,7 +86,7 @@
                   <li class="sub-menu">
                       <a href="newPatient.php" >
                           <i class="fa fa-plus"></i>
-                          <span>New Data</span>
+                          <span>Entry Patient</span>
                       </a>
                   </li>
               </ul>
