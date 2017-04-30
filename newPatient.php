@@ -9,8 +9,8 @@
 
     <title>DASHGUM - Bootstrap Admin Template</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap core CSS 
+    <link href="assets/css/bootstrap.css" rel="stylesheet">-->
     <!--external css-->
     <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="assets/js/bootstrap-datepicker/css/datepicker.css" />
@@ -20,11 +20,7 @@
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/style-responsive.css" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+
     
     <style>
         #bar_blank{
@@ -43,6 +39,34 @@
             display: none;
         }
     </style>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" >
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+    <script src="http://malsup.github.com/jquery.form.js"></script> 
+    <script> 
+        $(document).ready(function() { 
+
+         var progressbar     = $('.progress-bar');
+
+            $(".upload-image").click(function(){
+            	$(".form-horizontal-progress").ajaxForm(
+		{
+		  target: '.preview',
+		  beforeSend: function() {
+			$(".progress").css("display","block");
+			progressbar.width('0%');
+			progressbar.text('0%');
+                    },
+		    uploadProgress: function (event, position, total, percentComplete) {
+		        progressbar.width(percentComplete + '%');
+		        progressbar.text(percentComplete + '%');
+		     },
+		})
+		.submit();
+            });
+
+        }); 
+    </script>
   </head>
 
   <body>
@@ -149,48 +173,11 @@
                                   <input class="form-control" type="number" id="bloodGlucose" min="1" max="200">
                               </div>
                           </div>
-                          <!--<div class="form-group">
-                              <label class="col-sm-2 col-sm-2 control-label">Placeholder</label>
-                              <div class="col-sm-10">
-                                  <input type="text"  class="form-control" placeholder="placeholder">
-                              </div>
-                          </div>
-                          <div class="form-group">
-                              <label class="col-sm-2 col-sm-2 control-label">Password</label>
-                              <div class="col-sm-10">
-                                  <input type="password"  class="form-control" placeholder="">
-                              </div>
-                          </div>
-                          <div class="form-group">
-                              <label class="col-lg-2 col-sm-2 control-label">Static control</label>
-                              <div class="col-lg-10">
-                                  <p class="form-control-static">email@example.com</p>
-                              </div>
-                          </div>-->
                       </form>
                   </div>
           		</div><!-- col-lg-12-->      	
           	</div><!-- /row -->
           	
-          	<!-- INLINE FORM ELELEMNTS -->
-          	<div class="row mt">
-          		<div class="col-lg-12">
-          			<div class="form-panel">
-                  	  <h4 class="mb"><i class="fa fa-angle-right"></i> Inline Form</h4>
-                      <form class="form-inline" role="form">
-                          <div class="form-group">
-                              <label class="sr-only" for="exampleInputEmail2">Email address</label>
-                              <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
-                          </div>
-                          <div class="form-group">
-                              <label class="sr-only" for="exampleInputPassword2">Password</label>
-                              <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
-                          </div>
-                          <button type="submit" class="btn btn-theme">Sign in</button>
-                      </form>
-          			</div><!-- /form-panel -->
-          		</div><!-- /col-lg-12 -->
-          	</div><!-- /row -->
           	
           	<!-- INPUT MESSAGES -->
           	<div class="row mt">
@@ -198,116 +185,22 @@
           			<div class="form-panel">
                   	  <h4 class="mb"><i class="fa fa-angle-right"></i> Patient's Sensors Data</h4>
                         <div class="form-group">  
-                          <form class="form-horizontal tasi-form" method="get">
-                                  <div id="bar_blank">
-                                        <div id="bar_color"></div>
-                                  </div>
-                              <div id="status"></div>
-                                  <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" id="myForm" enctype="multipart/form-data" target="hidden_iframe">
-                                        <input type="hidden" value="myForm" name="<?php echo ini_get("session.upload_progress.name");?>">
-                                        <input type="file" name="userfile"><br>
-                                        <input type="submit" value="Start Upload">
-                                  </form>
-                                  <iframe id="hidden_iframe" name="hidden_iframe" src="about:blank"></iframe>
-                          </form>
+                            <div style="border: 1px solid #a1a1a1; text-align: center; width: 500px;padding: 30px; margin: 0px auto">
+                                <form action="uploadpro.php" enctype="multipart/form-data" class="form-horizontal-progress" method="post">
+                                    <div class="preview"></div>
+                                    <div class="progress" style="display:none">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                                           0%
+                                        </div>
+                                    </div>
+                                    
+                                    <input type="file" name="image" class="form-control" />
+                                    <button class="btn btn-primary upload-image">Upload File</button>
+                                </form>
+                            </div>
                         </div>
           			</div><!-- /form-panel -->
           		</div><!-- /col-lg-12 -->
-          	</div><!-- /row -->
-          	
-          	<!-- INPUT MESSAGES -->
-          	<div class="row mt">
-          		<div class="col-lg-12">
-          			<div class="form-panel">
-                  	  <h4 class="mb"><i class="fa fa-angle-right"></i> Checkboxes, Radios & Selects</h4>
-						<div class="checkbox">
-						  <label>
-						    <input type="checkbox" value="">
-						    Option one is this and that&mdash;be sure to include why it's great
-						  </label>
-						</div>
-						
-						<div class="radio">
-						  <label>
-						    <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-						    Option one is this and that&mdash;be sure to include why it's great
-						  </label>
-						</div>
-						<div class="radio">
-						  <label>
-						    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-						    Option two can be something else and selecting it will deselect option one
-						  </label>
-						</div>
-						
-						<hr>
-						<label class="checkbox-inline">
-						  <input type="checkbox" id="inlineCheckbox1" value="option1"> 1
-						</label>
-						<label class="checkbox-inline">
-						  <input type="checkbox" id="inlineCheckbox2" value="option2"> 2
-						</label>
-						<label class="checkbox-inline">
-						  <input type="checkbox" id="inlineCheckbox3" value="option3"> 3
-						</label>
-						
-						<hr>
-						<select class="form-control">
-						  <option>1</option>
-						  <option>2</option>
-						  <option>3</option>
-						  <option>4</option>
-						  <option>5</option>
-						</select>
-						<br>
-						<select multiple class="form-control">
-						  <option>1</option>
-						  <option>2</option>
-						  <option>3</option>
-						  <option>4</option>
-						  <option>5</option>
-						</select>        		
-          			</div><!-- /form-panel -->
-          		</div><!-- /col-lg-12 -->
-          		
-          	<!-- CUSTOM TOGGLES -->
-          		<div class="col-lg-12">
-          			<div class="form-panel">
-                  	  <h4 class="mb"><i class="fa fa-angle-right"></i> Custom Toggles</h4>
-                          <div class="row mt">
-                              <div class="col-sm-6 text-center">
-                                  <input type="checkbox" checked="" data-toggle="switch" />
-                              </div>
-                              <div class="col-sm-6 text-center">
-                                  <input type="checkbox" data-toggle="switch" />
-                              </div>
-                          </div>
-                          <div class="row mt">
-                              <div class="col-sm-6 text-center">
-                                  <div class="switch switch-square"
-                                       data-on-label="<i class=' fa fa-check'></i>"
-                                       data-off-label="<i class='fa fa-times'></i>">
-                                      <input type="checkbox" />
-                                  </div>
-                              </div>
-                              <div class="col-sm-6 text-center">
-                                  <div class="switch switch-square"
-                                       data-on-label="<i class=' fa fa-check'></i>"
-                                       data-off-label="<i class='fa fa-times'></i>">
-                                      <input type="checkbox" checked="" />
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="row mt">
-                              <div class="col-sm-6 text-center">
-                                  <input type="checkbox" disabled data-toggle="switch" />
-                              </div>
-                              <div class="col-sm-6 text-center">
-                                  <input type="checkbox" checked disabled data-toggle="switch" />
-                              </div>
-                          </div>
-          			</div>
-          		</div>
           	</div><!-- /row -->
           	
           	
