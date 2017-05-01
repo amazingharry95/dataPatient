@@ -40,6 +40,10 @@
             margin-bottom: 12px; /* Add some space below the input */
         }
       </style>
+      
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
 
   <body>
@@ -166,7 +170,7 @@
                                   <td>
                                       <button class="btn btn-success btn-xs"><i class="glyphicon glyphicon-eye-open"></i></button>
                                       <button class="btn btn-primary btn-xs"><i class="	glyphicon glyphicon-edit"></i></button>
-                                      <a href="#" class="confirm-delete" data-id="1"><button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button></a>
+                                      <button class="btn btn-danger btn-xs" data-target="#myModal" data-toggle="modal"><i class="fa fa-trash-o "></i></button>
                                   </td>
                               </tr>
                               </tbody>
@@ -177,18 +181,22 @@
           </section>
       </section>
       
-      <div id="myModal" class="modal hide">
-        <div class="modal-header">
-            <a href="#" data-dismiss="modal" aria-hidden="true" class="close">x</a>
-            <h3>Delete</h3>
-        </div>
-        <div class="modal-body">
-            <p>You are about to delete.</p>
-            <p>Do you want to procedd?</p>
-        </div>
-        <div class="modal-footer">
-            <a href="#" id="btnYes" class="btn danger">Yes</a>
-            <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">No</a>
+      <div id="myModal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background: red; text-align: center;">
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="close">x</a>
+                    <h3>Delete</h3>
+                </div>
+                <div class="modal-body">
+                    <p>You are about to delete.</p>
+                    <p>Do you want to procedd?</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="btnYes" class="btn danger">Close</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">Delete</a>
+                </div>
+            </div>
         </div>
       </div>
 
@@ -304,26 +312,7 @@
             }
     </script>
     
-      <script>
-        $('#myModal').on('show', function() {
-    var id = $(this).data('id'),
-        removeBtn = $(this).find('.danger');
-})
 
-$('.confirm-delete').on('click', function(e) {
-    e.preventDefault();
-
-    var id = $(this).data('id');
-    $('#myModal').data('id', id).modal('show');
-});
-
-$('#btnYes').click(function() {
-    // handle deletion here
-  	var id = $('#myModal').data('id');
-  	$('[data-id='+id+']').remove();
-  	$('#myModal').modal('hide');
-});
-      </script>
   
 
   </body>
