@@ -185,16 +185,16 @@
           <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header" style="background: red; text-align: center;">
-                    <a href="#" data-dismiss="modal" aria-hidden="true" class="close">x</a>
-                    <h3>Delete</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4>Delete</h4>
                 </div>
                 <div class="modal-body">
                     <p>You are about to delete.</p>
                     <p>Do you want to procedd?</p>
                 </div>
                 <div class="modal-footer">
-                    <a href="#" id="btnYes" class="btn danger">Close</a>
-                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">Delete</a>
+                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                     <button type="button" class="btn btn-danger" id="confirm">Delete</button>
                 </div>
             </div>
         </div>
