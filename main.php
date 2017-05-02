@@ -168,7 +168,7 @@
                                   <td>Gian Sebastian Anjasmara </td>
                                   <td><span class="label label-success label-mini">Healthy</span></td>
                                   <td>
-                                      <button class="btn btn-success btn-xs"><i class="glyphicon glyphicon-eye-open"></i></button>
+                                      <button class="btn btn-success btn-xs" data-target="#myProfile" data-toggle="modal"><i class="glyphicon glyphicon-eye-open"></i></button>
                                       <button class="btn btn-primary btn-xs"><i class="	glyphicon glyphicon-edit"></i></button>
                                       <button class="btn btn-danger btn-xs" data-target="#myModal" data-toggle="modal"><i class="fa fa-trash-o "></i></button>
                                   </td>
@@ -181,7 +181,52 @@
           </section>
       </section>
       
-      <div id="myModal" class="modal fade" role="dialog">
+      <div id="myProfile" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">RH003</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            
+                                <table class="table table-user-information">
+                                    <tbody>
+                                        <tr>
+                                            <td>Name:</td>
+                                            <td>Hariyanto</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Type:</td>
+                                            <td>Random</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Diagnosis:</td>
+                                            <td>HEALTHY</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Blood Glucose Level:</td>
+                                            <td>180</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <a href="#" class="btn btn-primary">Full Profile</a>
+                            
+                        </div>
+                    </div>
+                   <div class="panel-footer">
+                       <a href="#" data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
+                       <span class="pull-right">
+                            <a data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+                       </span>
+                   </div>
+               </div>
+            </div>
+        </div>
+      </div>
+      
+        <div id="myModal" class="modal fade" role="dialog">
           <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header" style="background: red; text-align: center;">

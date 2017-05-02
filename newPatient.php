@@ -1,3 +1,12 @@
+<?php
+    if($_POST){
+        $folder = "tmp/";
+        $redirect = "newPatient.php?success";
+        move_uploaded_file($_FILES["file"]["tmp_name"], "$folder".$_FILES["file"]["name"]);
+        header('Location: '.$redirect);
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -44,28 +53,29 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
     <script src="http://malsup.github.com/jquery.form.js"></script> 
     <script> 
-        $(document).ready(function() { 
+            $(document).ready(function() {  
+// 
 
-         var progressbar     = $('.progress-bar');
+//show the progress bar only if a file field was clicked 
+    var show_bar = 0; 
+    $('input[type="file"]').click(function(){ 
+        show_bar = 1; 
+    }); 
 
-            $(".upload-image").click(function(){
-            	$(".form-horizontal-progress").ajaxForm(
-		{
-		  target: '.preview',
-		  beforeSend: function() {
-			$(".progress").css("display","block");
-			progressbar.width('0%');
-			progressbar.text('0%');
-                    },
-		    uploadProgress: function (event, position, total, percentComplete) {
-		        progressbar.width(percentComplete + '%');
-		        progressbar.text(percentComplete + '%');
-		     },
-		})
-		.submit();
-            });
+//show iframe on form submit 
+    $("#form1").submit(function(){ 
 
-        }); 
+        if (show_bar === 1) {  
+            $('#upload_frame').show(); 
+            function set () { 
+                $('#upload_frame').attr('src','upload_frame.php?up_id=<?php echo $up_id; ?>'); 
+            } 
+            setTimeout(set); 
+        } 
+    }); 
+// 
+
+}); 
     </script>
   </head>
 
