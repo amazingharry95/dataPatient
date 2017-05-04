@@ -22,8 +22,6 @@
     <link href="assets/css/bootstrap.css" rel="stylesheet">-->
     <!--external css-->
     <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="assets/js/bootstrap-datepicker/css/datepicker.css" />
-    <link rel="stylesheet" type="text/css" href="assets/js/bootstrap-daterangepicker/daterangepicker.css" />
         
     <!-- Custom styles for this template -->
     <link href="assets/css/style.css" rel="stylesheet">
@@ -52,31 +50,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" >
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
     <script src="http://malsup.github.com/jquery.form.js"></script> 
-    <script> 
-            $(document).ready(function() {  
-// 
-
-//show the progress bar only if a file field was clicked 
-    var show_bar = 0; 
-    $('input[type="file"]').click(function(){ 
-        show_bar = 1; 
-    }); 
-
-//show iframe on form submit 
-    $("#form1").submit(function(){ 
-
-        if (show_bar === 1) {  
-            $('#upload_frame').show(); 
-            function set () { 
-                $('#upload_frame').attr('src','upload_frame.php?up_id=<?php echo $up_id; ?>'); 
-            } 
-            setTimeout(set); 
-        } 
-    }); 
-// 
-
-}); 
-    </script>
+    
   </head>
 
   <body>
@@ -155,19 +129,22 @@
                           <div class="form-group">
                               <label class="col-sm-2 col-sm-2 control-label">Type of Patient</label>
                               <div class="col-sm-10">
-                                    <select class="form-control">
+                                    <select class="form-control" id="patientType">
+                                      <option></option>
                                       <option>RANDOM</option>
                                       <option>FASTING</option>
                                     </select>
+                                  <span class="help-block" id="bloodGlucose" style="display:none" data-target="#bloodGlucoseInput" data-toggle="modal" style="color: blue"><a target="_blank" style="text-decoration: none; cursor:pointer">Fasting Blood Glucose Level</a></span>
                               </div>
                           </div>
                           <div class="form-group">
                               <label class="col-sm-2 col-sm-2 control-label">Diagnosis of the Patient</label>
                               <div class="col-sm-10">
                                     <select class="form-control">
-                                      <option>HEALTHY</option>
-                                      <option>AMID</option>
-                                        <option>CHRONIC</option>
+                                      <option></option>
+                                      <option style="background-color: #5CB85C; color: white">HEALTHY</option>
+                                      <option style="background-color: #F0AD4E; color: white">AMID</option>
+                                      <option style="background-color: #D9534F; color: white">CHRONIC</option>
                                     </select>
                               </div>
                           </div>
@@ -177,7 +154,7 @@
                                   <input class="form-control" id="patientName" type="text">
                               </div>
                           </div>
-                          <div class="form-group">
+                          <div class="form-group" id="normalBGL">
                               <label class="col-sm-2 col-sm-2 control-label">Blood Glucose Level</label>
                               <div class="col-sm-10">
                                   <input class="form-control" type="number" id="bloodGlucose" min="1" max="200">
@@ -229,6 +206,38 @@
       </footer>
       <!--footer end-->
   </section>
+      
+<div id="bloodGlucoseInput" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">RH003</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            
+                                <table class="table table-user-information">
+                                    <tbody>
+                                        <tr>
+                                            <td>BGL Before Fasting:</td>
+                                            <td><input class="form-control" type="number" id="bloodGlucoseBefore" min="1" max="200"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>BGL After Eating:</td>
+                                            <td><input class="form-control" type="number" id="bloodGlucoseBefore" min="1" max="200"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                     </div>
+                    </div>
+                   <div class="panel-footer">
+                       <a href="#" data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-success"><i class="glyphicon glyphicon-ok"></i></a>
+                   </div>
+               </div>
+            </div>
+        </div>
+      </div>
 
     <!-- js placed at the end of the document so the pages load faster -->
     <script src="assets/js/jquery.js"></script>
@@ -252,26 +261,28 @@
 	
 	<!--custom checkbox & radio-->
 	
-	<script type="text/javascript" src="assets/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-	<script type="text/javascript" src="assets/js/bootstrap-daterangepicker/date.js"></script>
-	<script type="text/javascript" src="assets/js/bootstrap-daterangepicker/daterangepicker.js"></script>
-	
 	<script type="text/javascript" src="assets/js/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
-	
-	
-	<script src="assets/js/form-component.js"></script>    
-    
-    
+	   
   <script>
-      //custom select box
-
-      $(function(){
-          $('select.styled').customSelect();
-      });
-
+    $(document).ready( function() {
+        //var value = document.getElementById('patientType').value;
+        $('#patientType').bind('change', function (e){
+            if($('#patientType').val() == 'FASTING'){
+                $('#bloodGlucose').show;
+                $("#bloodGlucose").css({ display: "inline-block" });
+                $('#normalBGL').hide;
+                $("#normalBGL").css({ display: "none" });
+                //alert($('#patientType').val());
+            }
+            else if($('#patientType').val() == 'RANDOM'){
+                $('#bloodGlucose').hide;
+                $("#bloodGlucose").css({ display: "none" });
+                $('#normalBGL').show;
+                $("#normalBGL").css({ display: "block" });
+            }
+        }).trigger('change');
+    });    
   </script>
-      
-  <script type="text/javascript" src="javascript/script.js"></script>
 
   </body>
 </html>
