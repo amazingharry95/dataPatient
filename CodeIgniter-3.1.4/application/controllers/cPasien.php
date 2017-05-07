@@ -7,6 +7,9 @@ class cPasien extends CI_Controller{
         $this->load->model('');
         $this->load->helper('url_helper');
         $this->load->library('session');
+        $this->load->model('patientModel');
+        $this->load->helper('date');
+        $this->load->database();
         
         /*if ($this->session->userdata() === NULL){
             redirect();
@@ -21,49 +24,100 @@ class cPasien extends CI_Controller{
         $this->load->view('footing/footEntry');
     }
     
-    public function upload_file(){
-        $status = "";
-        $msg = "";
-        $file_element_name = 'userfile';
+    protected function cekNumberRow($tipe, $diagnosa){
+        $numberRow = $this->patientModel->countRow($tipe, $diagnosa);
         
-        if(empty($_POST['title'])){
-            $status = 'error';
-            $msg = 'Please enter a title!';
-        }
-        
-       if ($status != "error")
-    {
-        $config['upload_path'] = './files/';
-        $config['allowed_types'] = 'txt|csv';
-        $config['max_size'] = 1024 * 8;
-        $config['encrypt_name'] = TRUE;
- 
-        $this->load->library('upload', $config);
- 
-        if (!$this->upload->do_upload($file_element_name))
-        {
-            $status = 'error';
-            $msg = $this->upload->display_errors('', '');
-        }
-        else
-        {
-            $data = $this->upload->data();
-            $file_id = $this->files_model->insert_file($data['file_name'], $_POST['title']);
-            if($file_id)
-            {
-                $status = "success";
-                $msg = "File successfully uploaded";
-            }
-            else
-            {
-                unlink($data['full_path']);
-                $status = "error";
-                $msg = "Something went wrong when saving the file, please try again.";
-            }
-        }
-        @unlink($_FILES[$file_element_name]);
+        #echo $numberRow;
+        return str_pad($numberRow+1, 3, "0", STR_PAD_LEFT);
     }
-    echo json_encode(array('status' => $status, 'msg' => $msg));
+    
+    protected function convertType($tipe){
+        if ($tipe == 'RANDOM'){
+            return 1;
+        }
+        else if ($tipe == 'FASTING'){
+            return 2;
+        }
+    }
+    
+    protected function convertDiagnose($diagnosa){
+        if($diagnosa == 'HEALTHY'){
+            return 1;
+        }
+        else if ($diagnosa == 'AMID'){
+            return 2;
+        }
+        else if ($diagnosa == 'CHRONIC'){
+            return 3;
+        }
+    }
+    
+    public function getID($tipe, $diagnosa){
+        switch ($tipe){
+            case 1:
+                $type = "R";
+                break;
+            case 2:
+                $type = "F";
+                break;
+            default:
+                $type = "U";
+        }
+        
+        switch ($diagnosa){
+            case 1:
+                $diagnose = "H";
+                break;
+            case 2:
+                $diagnose = "A";
+                break;
+            case 3:
+                $diagnose = "C";
+                break;
+            default:
+                $diagnose = "H";
+        }
+        
+        $idNomor = $this->cekNumberRow($tipe, $diagnosa);
+        
+        $idPatient = $type.$diagnose.$idNomor;
+        
+        return $idPatient;
+    }
+    
+    public function getPatient(){
+        $head['title'] = 'Home | DATA PATIENT';
+        $head['halamanUtama'] = 1;
+    
+        $query = $this->db->get("patient");
+        $data['records'] = $query->result();
+        
+        $this->load->view('heading/headHome', $head);
+        $this->load->view('home', $data);
+        $this->load->view('footing/footHome');
+    }
+    
+    public function addPatient(){
+        //$this->load->model('patientModel');
+        
+        if($this->input->get()){
+            $namaPatient = strtoupper($this->input->get('patientName'));
+            $diagnosa = $this->convertDiagnose($this->input->get('diagnosa'));
+            $tipe = $this->convertType($this->input->get('patientType'));
+            $bgl = $this->input->get('bloodGlucose');
+            $idPatient = $this->getID($tipe, $diagnosa);
+            
+            $data = array(
+                'IDPATIENT' => $idPatient,
+                'NAMAPATIENT' => $namaPatient,
+                'DIAGNOSAPATIENT' => $diagnosa,
+                'JENISPATIENT' => $tipe,
+                'TANGGALRECORD' => date('Y-m-d', now()),
+                'KADARGULA' => $bgl
+            );
+            
+            $this->patientModel->insertPatient($data);
+        }
     }
 }
 ?>

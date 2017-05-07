@@ -55,7 +55,7 @@
               	  <h5 class="centered">HARIYANTO</h5>
               	  	
                   <li class="mt">
-                      <a class="active" href="<?php echo site_url('cHalamanUtama') ?>">
+                      <a class="active" href="<?php echo site_url('cPasien/getPatient') ?>">
                           <i class="fa fa-th"></i>
                           <span>Data Patient</span>
                       </a>

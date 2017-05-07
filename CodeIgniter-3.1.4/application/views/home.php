@@ -16,58 +16,30 @@
                               </tr>
                               </thead>
                               <tbody>
-                              <tr>
-                                  <td><a href="basic_table.html#">RH001</a></td>
-                                  <td>Aldhiaz Fathra</td>
-                                  <td><span class="label label-success label-mini">Healthy</span></td>
-                                  <td>
-                                      <button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
-                                      <button class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button>
-                                      <button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button>
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <td>
-                                      <a href="basic_table.html#">
-                                          RA001
-                                      </a>
-                                  </td>
-                                  <td>Nanang Taufan Budiansyah</td>
-                                  <td><span class="label label-warning label-mini">Amid</span></td>
-                                  <td>
-                                      <button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
-                                      <button class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button>
-                                      <button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button>
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <td>
-                                      <a href="basic_table.html#">
-                                          RC001
-                                      </a>
-                                  </td>
-                                  <td>Budi Pangestu Tanujaya </td>
-                                  <td><span class="label label-danger label-mini">Chronic</span></td>
-                                  <td>
-                                      <button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
-                                      <button class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button>
-                                      <button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button>
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <td>
-                                      <a href="basic_table.html#">
-                                          FH001
-                                      </a>
-                                  </td>
-                                  <td>Gian Sebastian Anjasmara </td>
-                                  <td><span class="label label-success label-mini">Healthy</span></td>
-                                  <td>
-                                      <button class="btn btn-success btn-xs" data-target="#myProfile" data-toggle="modal"><i class="glyphicon glyphicon-eye-open"></i></button>
-                                      <button class="btn btn-primary btn-xs"><i class="	glyphicon glyphicon-edit"></i></button>
-                                      <button class="btn btn-danger btn-xs" data-target="#myModal" data-toggle="modal"><i class="fa fa-trash-o "></i></button>
-                                  </td>
-                              </tr>
+                            <?php
+                              foreach($records as $patient){
+                              echo "<tr>";
+                              echo "<td>";
+                              echo "<a href='basic_table.html'>".$patient->IDPATIENT."</a>";
+                              echo "</td>";
+                              echo "<td>".$patient->NAMAPATIENT."</td>";
+                              if ($patient->DIAGNOSAPATIENT == 1){
+                                echo "<td><span class='label label-success label-mini'>HEALTHY</span></td>";
+                              }
+                              else if ($patient->DIAGNOSAPATIENT == 2){
+                                echo "<td><span class='label label-warning label-mini'>AMID</span></td>";
+                              }
+                              else if ($patient->DIAGNOSAPATIENT == 3){
+                                echo "<td><span class='label label-danger label-mini'>CHRONIC</span></td>";
+                              }
+                              echo "<td>";
+                              echo "<button class='btn btn-success btn-xs' data-target='#myProfile' data-toggle='modal'><i class='glyphicon glyphicon-eye-open'></i></button>";
+                              echo "<button class='btn btn-primary btn-xs'><i class='glyphicon glyphicon-edit'></i></button>";
+                              echo "<button class='btn btn-danger btn-xs' data-target='#myModal' data-toggle='modal'><i class='fa fa-trash-o '></i></button>";
+                              echo "</td>";
+                              echo "</tr>";
+                              }
+                            ?>
                               </tbody>
                           </table>
                       </div><!-- /content-panel -->
