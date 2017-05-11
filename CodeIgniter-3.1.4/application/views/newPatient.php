@@ -45,14 +45,15 @@
                           <div class="form-group" id="normalBGL">
                               <label class="col-sm-2 col-sm-2 control-label">Blood Glucose Level</label>
                               <div class="col-sm-10">
-                                  <input class="form-control" type="number" id="bloodGlucose" name="bloodGlucose" min="1" max="200">
+                                  <input class="form-control" type="number" id="bloodGlucose" name="bloodGlucose" min="1" max="400">
                               </div>
                           </div>
                           <div class="form-group" id="fileNapas">
                               <label class="col-sm-2 col-sm-2 control-label">Patient's Sensor Data</label>
                               <div class="col-sm-10">
-                                  <input type="file" name="userfile" id="userfile" class="form-control" />
-                                  <button class="btn btn-primary upload-image" type="submit" id="submit">Upload File</button>
+                                  <p id="msg"></p>
+                                  <input type="file" name="file" id="file" class="form-control" />
+                                  <button class="btn btn-primary upload-image" type="submit" id="upload">Upload File</button>
                               </div>
                           </div>
                           <div class="form-group">

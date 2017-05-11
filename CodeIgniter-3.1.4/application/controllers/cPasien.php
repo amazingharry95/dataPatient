@@ -115,9 +115,31 @@ class cPasien extends CI_Controller{
                 'TANGGALRECORD' => date('Y-m-d', now()),
                 'KADARGULA' => $bgl
             );
-            
-            $this->patientModel->insertPatient($data);
+            if($this->patientModel->insertPatient($data)){
+                $this->session->set_userdata('message', 'Save Patient Data');
+                $this->session->mark_as_flash('message');
+                
+                redirect(base_url());
+            }
         }
+    }
+    
+    public function deletePatient(){
+        $idPatient = $this->input->post('idpatient',TRUE);
+        $this->patientModel->deletePatient($idPatient);
+    }
+    
+    public function getProfile(){
+        $idpatient = $this->uri->segment('3');
+        $pasien['profil'] = $this->patientModel->getPatient($idpatient);
+        
+        $head['title'] = "$idpatient - Profile | DATA PATIENT";
+        
+        $this->load->view('heading/headHome', $head);
+        $this->load->view('profilePatient', $pasien);
+        $this->load->view('footing/footEntry');
+        
+        
     }
 }
 ?>

@@ -33,9 +33,9 @@
                                 echo "<td><span class='label label-danger label-mini'>CHRONIC</span></td>";
                               }
                               echo "<td>";
-                              echo "<button class='btn btn-success btn-xs' data-target='#myProfile' data-toggle='modal'><i class='glyphicon glyphicon-eye-open'></i></button>";
+                              echo "<a href='".base_url()."index.php/cPasien/getProfile/".$patient->IDPATIENT."'><button class='btn btn-success btn-xs' data-target='#myProfile' data-toggle='modal'><i class='glyphicon glyphicon-eye-open'></i></button></a>";
                               echo "<button class='btn btn-primary btn-xs'><i class='glyphicon glyphicon-edit'></i></button>";
-                              echo "<button class='btn btn-danger btn-xs' data-target='#myModal' data-toggle='modal'><i class='fa fa-trash-o '></i></button>";
+                              echo "<button class='btn btn-danger btn-xs delpatient' data-id='".$patient->IDPATIENT."'><i class='fa fa-trash-o'></i></button>";
                               echo "</td>";
                               echo "</tr>";
                               }
@@ -47,51 +47,6 @@
               </div>
           </section>
       </section>
-      
-      <div id="myProfile" class="modal fade" role="dialog">
-          <div class="modal-dialog">
-            <div class="modal-content">
-               <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">RH003</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            
-                                <table class="table table-user-information">
-                                    <tbody>
-                                        <tr>
-                                            <td>Name:</td>
-                                            <td>Hariyanto</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Type:</td>
-                                            <td>Random</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Diagnosis:</td>
-                                            <td>HEALTHY</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Blood Glucose Level:</td>
-                                            <td>180</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="#" class="btn btn-primary">Full Profile</a>
-                            
-                        </div>
-                    </div>
-                   <div class="panel-footer">
-                       <a href="#" data-original-title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
-                       <span class="pull-right">
-                            <a data-original-title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
-                       </span>
-                   </div>
-               </div>
-            </div>
-        </div>
-      </div>
       
         <div id="myModal" class="modal fade" role="dialog">
           <div class="modal-dialog">
@@ -106,8 +61,22 @@
                 </div>
                 <div class="modal-footer">
                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                     <button type="button" class="btn btn-danger" id="confirm">Delete</button>
+                     <button type="button" class="btn btn-danger" id="del" val="">Delete</button>
                 </div>
             </div>
         </div>
       </div>
+
+<script>
+    $(document).ready(function () {
+        $('.delpatient').click(function(){
+            $('#del').val($(this).data("id"));
+            $('#myModal').modal('show');
+        });
+        
+        $('#del').click(function(){
+            $.post("<?php echo base_url()?>index.php/cPasien/deletePatient", {idpatient: $('#del').val()});
+            window.location.href = "<?php echo base_url(); ?>index.php";
+        });
+    });
+</script>

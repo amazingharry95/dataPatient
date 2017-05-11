@@ -157,7 +157,7 @@
                           <div class="form-group" id="normalBGL">
                               <label class="col-sm-2 col-sm-2 control-label">Blood Glucose Level</label>
                               <div class="col-sm-10">
-                                  <input class="form-control" type="number" id="bloodGlucose" min="1" max="200">
+                                  <input class="form-control" type="number" id="bloodGlucose" min="1" max="400">
                               </div>
                           </div>
                       </form>
@@ -181,8 +181,8 @@
                                         </div>
                                     </div>
                                     
-                                    <input type="file" name="image" class="form-control" />
-                                    <button class="btn btn-primary upload-image">Upload File</button>
+                                    <input type="file" name="file" id="file" class="form-control" />
+                                    <button class="btn btn-primary upload-image" id="upload">Upload File</button>
                                 </form>
                             </div>
                         </div>
