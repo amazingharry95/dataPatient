@@ -93,8 +93,56 @@ class cPasien extends CI_Controller{
         $data['records'] = $query->result();
         
         $this->load->view('heading/headHome', $head);
-        $this->load->view('home', $data);
+        $this->load->view('home_v2', $data);
         $this->load->view('footing/footHome');
+    }
+    
+    public function getPatient2(){
+        #console.log('masuk');
+        $allPatient = $this->patientModel->makeDataTables();
+        #console.log('masuk');
+        #console.log($allPatient);
+        $data = array();
+        
+        foreach($allPatient as $row)
+        {
+            
+            if($row->FOTOPATIENT == ''){
+                $potoPatient = 'noPhoto.jpg';
+            }
+            else if(explode('.',$row->FOTOPATIENT)[1] == ''){
+                $potoPatient = 'noPhoto.jpg';
+            }
+            else{
+                $potoPatient = $row->FOTOPATIENT;
+            }
+            
+            $sub_array = array();
+            $sub_array[] = '<img src="'.base_url().'uploads/images/'.$potoPatient.'" class="img-thumbnail" width="100" height="50" />';
+            $sub_array[] = $row->NAMAPATIENT;
+            if ($row->DIAGNOSAPATIENT == 1){
+                $sub_array[] = "<span class='label label-success label-mini'>HEALTHY</span>";
+            }
+            else if ($row->DIAGNOSAPATIENT == 2){
+                $sub_array[] = "<span class='label label-warning label-mini'>AMID</span>";
+            }
+            else if ($row->DIAGNOSAPATIENT == 3){
+                $sub_array[] = "<span class='label label-danger label-mini'>CHRONIC</span>";
+            }
+            
+            $sub_array[] = "<a href='".base_url()."index.php/cPasien/getProfile/".$row->IDPATIENT."'><button class='btn btn-success btn-xs' data-target='#myProfile' data-toggle='modal'><i class='glyphicon glyphicon-eye-open'></i></button></a>";
+            $sub_array[] = "<button class='btn btn-primary btn-xs'><i class='glyphicon glyphicon-edit'></i></button>";
+            $sub_array[] = "<button class='btn btn-danger btn-xs delpatient' data-id='".$row->IDPATIENT."'><i class='fa fa-trash-o'></i></button>";
+            $data[] = $sub_array;
+        }
+        
+        $output = array(
+            "draw" => intval($_POST["draw"]),
+            "recordsTotal" => $this->patientModel->get_all_data(),  
+            "recordsFiltered" => $this->patientModel->get_filtered_data(),  
+            "data" => $data
+        );
+        echo json_encode($output);
     }
     
     public function addPatient(){
@@ -124,6 +172,55 @@ class cPasien extends CI_Controller{
         }
     }
     
+    function addPatient2(){
+            $namaPatient = strtoupper($this->input->post('patientName'));
+            $diagnosa = $this->convertDiagnose($this->input->post('diagnosa'));
+            $tipe = $this->convertType('RANDOM');
+            $bgl = $this->input->post('bloodGlucose');
+            $idPatient = $this->getID($tipe, $diagnosa);
+        
+            #echo "<script>alert('masuk')</script>";
+            
+            $patientData = array(
+                'IDPATIENT' => $idPatient,
+                'NAMAPATIENT' => $namaPatient,
+                'DIAGNOSAPATIENT' => $diagnosa,
+                'JENISPATIENT' => $tipe,
+                'TANGGALRECORD' => date('Y-m-d', now()),
+                'KADARGULA' => $bgl,
+                'FOTOPATIENT' => $this->uploadFoto(),
+                'SENSORDATA' => $this->uploadSensor()
+            );
+            
+            #echo "<script>alert('masuk')</script>";
+        
+            if($this->patientModel->insertPatient($patientData)){
+                redirect(base_url());
+            }
+    }
+    
+    function uploadFoto(){
+        if(isset($_FILES['patientImage'])){
+            $extension = explode('.', $_FILES['patientImage']['name']);
+            $new_name = rand().'.'.$extension[1];
+            $destination = './uploads/images/'.$new_name;
+            move_uploaded_file($_FILES['patientImage']['tmp_name'], $destination);
+            
+            return $new_name;
+        }
+    }
+    
+    function uploadSensor(){
+        if(isset($_FILES['patientSensor'])){
+            $extension = explode('.', $_FILES['patientSensor']['name']);
+            $new_name = rand().'.'.$extension[1];
+            $destination = './uploads/sensors/'.$new_name;
+            move_uploaded_file($_FILES['patientSensor']['tmp_name'], $destination);
+            
+            return $new_name;
+        }
+    }
+    
     public function deletePatient(){
         $idPatient = $this->input->post('idpatient',TRUE);
         $this->patientModel->deletePatient($idPatient);
@@ -133,13 +230,30 @@ class cPasien extends CI_Controller{
         $idpatient = $this->uri->segment('3');
         $pasien['profil'] = $this->patientModel->getPatient($idpatient);
         
-        $head['title'] = "$idpatient - Profile | DATA PATIENT";
+        $head['title'] = "Profile | DATA PATIENT";
+        $head['id'] = $idpatient;
         
-        $this->load->view('heading/headHome', $head);
+        $this->load->view('heading/headProfile', $head);
         $this->load->view('profilePatient', $pasien);
         $this->load->view('footing/footEntry');
+    }
+    
+    function getNamaFile($idPatient){
+        $namaFile = $this->patientModel->getFileName($idPatient);
         
-        
+        return $namaFile;
+    }
+    
+    public function getCOData(){
+        $idpatient = $this->uri->segment('3');
+        $namaFile = $this->getNamaFile($idpatient);
+        #echo "<script>console.log( 'Debug Objects: " . $namaFile . "' );</script>";
+        $path = "C:\wamp\www\dataPatient\CodeIgniter-3.1.4\assets\scripts\getDataCO.py";
+        $result = shell_exec("python $path $namaFile");
+        #print_r($result);
+        #echo "<script>console.log( 'Debug Objects: " . $result . "' );</script>";
+        echo $result;
+        #return $result;
     }
 }
 ?>

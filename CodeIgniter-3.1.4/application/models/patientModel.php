@@ -29,11 +29,39 @@
         public function getPatient($idPatient){
             $this->db->select('*');
             $this->db->from('patient');
-            $this->db->where('IDPATIENT', $idPatient);
-            
+            $this->db->where('IDPATIENT', $idPatient);  
             $query = $this->db->get();
             
             return $query->row();
+        }
+        
+        public function makeDataTables(){
+           $query = $this->db->get('patient');
+           
+           return $query->result();
+        }
+        
+        function get_filtered_data(){  
+           $query = $this->db->get('patient');
+            
+           return $query->num_rows();  
+        }
+        
+        function get_all_data(){  
+           $this->db->select("*");  
+           $this->db->from('patient');
+            
+           return $this->db->count_all_results();  
+        }
+        
+        function getFileName($idPatient){
+            $this->db->select('SENSORDATA');
+            $this->db->from('patient');
+            $this->db->where('IDPATIENT', $idPatient);
+            $query = $this->db->get();
+            $row = $query->row();
+            
+            return $row->SENSORDATA;
         }
     }
 ?>
