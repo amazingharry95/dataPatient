@@ -63,5 +63,18 @@
             
             return $row->SENSORDATA;
         }
+        
+        function insertDataSensor($dataSensor){
+            if($this->db->insert("recorddata", $dataSensor)){
+                return true;
+            }
+        }
+        
+        function updatePatient($idPatient, $updateData){
+            $this->db->where("IDPATIENT", $idPatient);
+            $this->db->update("patient", $updateData);
+            
+            return true;
+        }
     }
 ?>

@@ -4,7 +4,7 @@
                   <div class="col-md-12">
                       <div class="table-responsive">
                           <br/>
-                          <button type="button" data-toggle="modal" data-target="#patientModal" class="btn btn-info btn-lg">NEW PATIENT</button>
+                          <button type="button" data-toggle="modal" data-target="#patientModal" class="btn btn-info btn-lg">NEW GROUND-TRUTH</button>
                           <br /><br />
                           <table id="user_data" class="table table-bordered table-striped">
                               <thead>

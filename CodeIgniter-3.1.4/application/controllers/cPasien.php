@@ -131,7 +131,7 @@ class cPasien extends CI_Controller{
             }
             
             $sub_array[] = "<a href='".base_url()."index.php/cPasien/getProfile/".$row->IDPATIENT."'><button class='btn btn-success btn-xs' data-target='#myProfile' data-toggle='modal'><i class='glyphicon glyphicon-eye-open'></i></button></a>";
-            $sub_array[] = "<button class='btn btn-primary btn-xs'><i class='glyphicon glyphicon-edit'></i></button>";
+            $sub_array[] = "<a href='".base_url()."index.php/cPasien/showEditPage/".$row->IDPATIENT."'><button class='btn btn-primary btn-xs'><i class='glyphicon glyphicon-edit'></i></button>";
             $sub_array[] = "<button class='btn btn-danger btn-xs delpatient' data-id='".$row->IDPATIENT."'><i class='fa fa-trash-o'></i></button>";
             $data[] = $sub_array;
         }
@@ -143,6 +143,73 @@ class cPasien extends CI_Controller{
             "data" => $data
         );
         echo json_encode($output);
+    }
+    
+    function showEditPage(){
+        $idpatient = $this->uri->segment('3');
+        $pasien['profil'] = $this->patientModel->getPatient($idpatient);
+        
+        $head['title'] = "Edit Profile | DATA PATIENT";
+        $head['id'] = $idpatient;
+        
+        $this->load->view('heading/headHome', $head);
+        $this->load->view('editPatient', $pasien);
+        $this->load->view('footing/footEntry');
+        
+    }
+    
+    function editPatient(){
+        $idPatient = $this->uri->segment('3');
+        $updateNamaPatient = strtoupper($this->input->post('patientName'));
+        $updateDiagnosa = $this->convertDiagnose($this->input->post('diagnosa'));
+        $updateTipe = $this->convertType($this->input->post('patientType'));
+        $updateBgl = $this->input->post('bloodGlucose');
+        
+        if(isset($_FILES['patientSensor'])){
+            echo "<script>console.log( 'Debug Objects: masuk' );</script>";
+        }else{
+            echo "<script>console.log( 'Debug Objects: gak' );</script>";
+        }
+        
+        $updateData = array(
+            'NAMAPATIENT' => $updateNamaPatient,
+            'DIAGNOSAPATIENT' => $updateDiagnosa,
+            'JENISPATIENT' => $updateTipe,
+            'KADARGULA' => $updateBgl,
+            'SENSORDATA' => $this->uploadSensor()
+        );
+        
+        echo "<script>console.log( 'Debug Objects: " . $updateData['NAMAPATIENT'] . "' );</script>";
+        echo "<script>console.log( 'Debug Objects: " . $updateData['DIAGNOSAPATIENT'] . "' );</script>";
+        echo "<script>console.log( 'Debug Objects: " . $updateData['JENISPATIENT'] . "' );</script>";
+        echo "<script>console.log( 'Debug Objects: " . $updateData['KADARGULA'] . "' );</script>";
+        echo "<script>console.log( 'Debug Objects: " . $updateData['SENSORDATA'] . "' );</script>";
+        
+        if($this->patientModel->updatePatient($idPatient, $updateData)){
+                $fileSensorPasien = $updateData['SENSORDATA'];
+                $path = "C:\wamp\www\dataPatient\CodeIgniter-3.1.4\assets\scripts\getStatisticFeatures\main.py";
+                $result = shell_exec("python $path $fileSensorPasien $updateDiagnosa");
+                
+                $dataSensor = explode(',', $result);
+                echo "<script>console.log( 'Debug Objects: " . $dataSensor[0] . "' );</script>";
+                $inputDataSensor = array(
+                    'AVG_CO' => $dataSensor[0],
+                    'STD_CO' => $dataSensor[1],
+                    'STD_CO2' => $dataSensor[2],
+                    'STD_KETONE' => $dataSensor[3],
+                    'AVG_HUMID' => $dataSensor[4],
+                    'STD_VOC' => $dataSensor[5],
+                    'IDPATIENT' => $idPatient,
+                    'KELAS' => $updateDiagnosa
+                );
+                
+                if($this->patientModel->insertDataSensor($inputDataSensor)){
+                    redirect(base_url("index.php/cPasien/getProfile/$idPatient"));
+                }
+                else{
+                    echo "<script>alert('Error Insert Data!');</script>";
+                }
+        }
     }
     
     public function addPatient(){
@@ -177,6 +244,7 @@ class cPasien extends CI_Controller{
             $diagnosa = $this->convertDiagnose($this->input->post('diagnosa'));
             $tipe = $this->convertType('RANDOM');
             $bgl = $this->input->post('bloodGlucose');
+            #echo "<script>alert($diagnosa)</script>";
             $idPatient = $this->getID($tipe, $diagnosa);
         
             #echo "<script>alert('masuk')</script>";
@@ -195,14 +263,39 @@ class cPasien extends CI_Controller{
             #echo "<script>alert('masuk')</script>";
         
             if($this->patientModel->insertPatient($patientData)){
-                redirect(base_url());
+                $fileSensorPasien = $patientData['SENSORDATA'];
+                $path = "C:\wamp\www\dataPatient\CodeIgniter-3.1.4\assets\scripts\getStatisticFeatures\main.py";
+                $result = shell_exec("python $path $fileSensorPasien $diagnosa");
+                
+                $dataSensor = explode(',', $result);
+                $inputDataSensor = array(
+                    'AVG_CO' => $dataSensor[0],
+                    'STD_CO' => $dataSensor[1],
+                    'STD_CO2' => $dataSensor[2],
+                    'STD_KETONE' => $dataSensor[3],
+                    'AVG_HUMID' => $dataSensor[4],
+                    'STD_VOC' => $dataSensor[5],
+                    'IDPATIENT' => $idPatient,
+                    'KELAS' => $diagnosa
+                );
+                
+                if($this->patientModel->insertDataSensor($inputDataSensor)){
+                    redirect(base_url());
+                }
+                else{
+                    echo "<script>alert('Error Insert Data!');</script>";
+                }
+                //panggil fungsi python buat ambil statistik data
+                //insert statistik data ke db
+                
             }
     }
     
     function uploadFoto(){
         if(isset($_FILES['patientImage'])){
-            $extension = explode('.', $_FILES['patientImage']['name']);
-            $new_name = rand().'.'.$extension[1];
+            #$extension = explode('.', $_FILES['patientImage']['name']);
+            #$new_name = rand().'.'.$extension[1];
+            $new_name = $_FILES['patientImage']['name'];
             $destination = './uploads/images/'.$new_name;
             move_uploaded_file($_FILES['patientImage']['tmp_name'], $destination);
             
@@ -212,8 +305,9 @@ class cPasien extends CI_Controller{
     
     function uploadSensor(){
         if(isset($_FILES['patientSensor'])){
-            $extension = explode('.', $_FILES['patientSensor']['name']);
-            $new_name = rand().'.'.$extension[1];
+            #$extension = explode('.', $_FILES['patientSensor']['name']);
+            #$new_name = rand().'.'.$extension[1];
+            $new_name = $_FILES['patientSensor']['name'];
             $destination = './uploads/sensors/'.$new_name;
             move_uploaded_file($_FILES['patientSensor']['tmp_name'], $destination);
             
@@ -236,24 +330,6 @@ class cPasien extends CI_Controller{
         $this->load->view('heading/headProfile', $head);
         $this->load->view('profilePatient', $pasien);
         $this->load->view('footing/footEntry');
-    }
-    
-    function getNamaFile($idPatient){
-        $namaFile = $this->patientModel->getFileName($idPatient);
-        
-        return $namaFile;
-    }
-    
-    public function getCOData(){
-        $idpatient = $this->uri->segment('3');
-        $namaFile = $this->getNamaFile($idpatient);
-        #echo "<script>console.log( 'Debug Objects: " . $namaFile . "' );</script>";
-        $path = "C:\wamp\www\dataPatient\CodeIgniter-3.1.4\assets\scripts\getDataCO.py";
-        $result = shell_exec("python $path $namaFile");
-        #print_r($result);
-        #echo "<script>console.log( 'Debug Objects: " . $result . "' );</script>";
-        echo $result;
-        #return $result;
     }
 }
 ?>

@@ -24,16 +24,16 @@ dataBeneran = {}
 rows = []
 d={'cols': [], 'rows': []}
 time = 0
-increment = 137/len(data[2])
+increment = 137/len(data[0])
 
 
-for i in range(len(data[2])):
+for i in range(len(data[0])):
 	dataWaktu = {}
 	dataCO = {}
 	dataRows = {}
 	dataArrayCO = []
 	dataWaktu['v'] = str(time)
-	dataCO['v'] = data[2][i]
+	dataCO['v'] = data[0][i]
 	dataArrayCO.append(dataWaktu)
 	dataArrayCO.append(dataCO)
 	dataRows['c'] = dataArrayCO
