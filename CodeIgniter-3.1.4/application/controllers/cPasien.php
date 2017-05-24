@@ -212,32 +212,6 @@ class cPasien extends CI_Controller{
         }
     }
     
-    public function addPatient(){
-        //$this->load->model('patientModel');
-        
-        if($this->input->get()){
-            $namaPatient = strtoupper($this->input->get('patientName'));
-            $diagnosa = $this->convertDiagnose($this->input->get('diagnosa'));
-            $tipe = $this->convertType($this->input->get('patientType'));
-            $bgl = $this->input->get('bloodGlucose');
-            $idPatient = $this->getID($tipe, $diagnosa);
-            
-            $data = array(
-                'IDPATIENT' => $idPatient,
-                'NAMAPATIENT' => $namaPatient,
-                'DIAGNOSAPATIENT' => $diagnosa,
-                'JENISPATIENT' => $tipe,
-                'TANGGALRECORD' => date('Y-m-d', now()),
-                'KADARGULA' => $bgl
-            );
-            if($this->patientModel->insertPatient($data)){
-                $this->session->set_userdata('message', 'Save Patient Data');
-                $this->session->mark_as_flash('message');
-                
-                redirect(base_url());
-            }
-        }
-    }
     
     function addPatient2(){
             $namaPatient = strtoupper($this->input->post('patientName'));
