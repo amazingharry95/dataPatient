@@ -300,7 +300,15 @@ class cPasien extends CI_Controller{
         
         $head['title'] = "Profile | DATA PATIENT";
         $head['id'] = $idpatient;
-        
+        $dataSensorPasien = $this->patientModel->getDataSensor($idpatient);
+        $sensorData = $dataSensorPasien['AVG_HUMID'].",".$dataSensorPasien['STD_CO'].",".$dataSensorPasien['STD_CO2'].",".$dataSensorPasien['STD_KETONE'].",".$dataSensorPasien['KELAS'].",".$dataSensorPasien['IDPATIENT'];
+        #echo "<script>console.log( 'Debug Objects: " . $sensorData. "' );</script>";
+        $path = "C:\wamp\www\dataPatient\CodeIgniter-3.1.4\assets\scripts\classification\main3.py";
+        $path2 = "C:\wamp\www\dataPatient\CodeIgniter-3.1.4\assets\scripts\classification\main2.py";
+        $pasien['predictClass'] = shell_exec("python $path $sensorData");
+        #echo "<script>console.log( 'Debug Objects: " . $pasien['predictClass'] . "' );</script>";
+        $pasien['evaluation'] = shell_exec("python $path2");
+                
         $this->load->view('heading/headProfile', $head);
         $this->load->view('profilePatient', $pasien);
         $this->load->view('footing/footEntry');

@@ -24,7 +24,24 @@
                             </a>
                             <div class="media-body">
                         <p><input class="form-control" id="disabledInput" type="text" placeholder="<?php echo $profil->TANGGALRECORD; ?>" disabled></p>
-                        <h4 class="media-heading"><?php echo $profil->NAMAPATIENT; ?></h4>   
+                        <h4 class="media-heading"><?php echo $profil->NAMAPATIENT; ?></h4>
+                        <h3 class="media-heading">
+                            <?php
+                                $data = explode(',', $evaluation);
+                                
+                                if ($predictClass == 1){
+                                    echo "<span class='label label-success'>HEALTHY / $data[1]</span>";
+                                }
+                                else if ($predictClass == 3){
+                                    echo "<span class='label label-danger'>DIABET / $data[2]</span>";
+                                }
+                                /*echo "<br>";
+                                echo "<p>Accuracy: $data[0]</p>";
+                                echo "<p>Kappa: $data[5]</p>";*/
+                            ?>
+                        </h3>
+                        
+                        
                 		<!--<p><span class="label label-info">PREDICTED</span> <span class="label label-warning">PRECISSION</span></p>-->
                         <p>
                                 <?php

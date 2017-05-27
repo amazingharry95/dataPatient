@@ -36,6 +36,7 @@
         }
         
         public function makeDataTables(){
+           $this->db->order_by('DIAGNOSAPATIENT', 'asc');
            $query = $this->db->get('patient');
            
            return $query->result();
@@ -75,6 +76,17 @@
             $this->db->update("patient", $updateData);
             
             return true;
+        }
+        
+        function getDataSensor($idPatient){
+            $this->db->select('AVG_HUMID,STD_CO,STD_CO2,STD_KETONE,KELAS,IDPATIENT');
+            $this->db->from('RECORDDATA');
+            $this->db->where('IDPATIENT', $idPatient);
+            
+            $query = $this->db->get();
+                
+            return $query->row_array();
+            
         }
     }
 ?>
